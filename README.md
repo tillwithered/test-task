@@ -9,36 +9,35 @@
 
 ![Class diagram](https://hb.bizmrg.com/kazanexpress/class_diagram.png)
 
-## Requirements
-### Shop admin
-1. Navigate through the shops list.
-2. Make a search by title.
-3. Edit everything except shop id.
-4. Upload image as shop pic. 
+## Требования
+### Администрирование магазина
+1. Навигация по списку магазинов.
+2. Поиск  по названию.
+3. Редактирование информации магазина, кроме id магазина.
+4. Загрузка изображение в виде картинки магазина. 
 
-### Product admin
-1. Navigate through product list.
-2. Search by id or product title.
-3. Edit everything except product id.
-4. First image should be displayed as main image in both list view and product view.
-5. Sort products in product list by number of orders and by price.
-6. Filter list of products by active flag.
-7. Filter by price range.
-8. Attach product to one or more categories.
+### Администрирование продукта
+1. Навигация по списку товаров.
+2. Поиск по идентификатору или названию продукта.
+3. Редактирование информации о продкуте, кроме id продукта.
+4. Первое изображение должно отображаться как основное как в listview, так и в product view.
+5. Сортировка товаров в списке товаров по количеству заказов и по цене.
+6. Отфильтровать список товаров по активному флагу.
+7. Фильтровать по ценовому диапазону.
+8. Прикрепите товар к одной или нескольким категориям.
 
-### Category admin
+### Администрирование категории
 1. Navigate through categories list.
 2. Search by product id, title and parent category.
 3. Add one or more parent categories. 
 4. Display all possible paths to chosen category. 
 
-### Management
-There should be at least two administrative roles for the following purposes:
-1. Moderation for products. 
-2. Moderation of all available pages. 
+### Менеджмент
+Для следующих целей должно быть как минимум две административные роли:
+1. Модерация продуктов. 
+2. Модерация всех доступных страниц. 
 
-## Submission
-Fork this repository, prepare your solution and make a pull request when you're done.
-Don't forget to write docs :)
+## Подчинение
+Разветвите этот репозиторий, подготовьте свое решение и сделайте запрос на извлечение, когда закончите. Не забудьте написать документы :)
 
-## Good luck!
+## Удачи!
