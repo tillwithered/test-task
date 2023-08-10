@@ -13,13 +13,26 @@ class Shop(models.Model):
         verbose_name = "Магазин"
         verbose_name_plural = "Магазины"
         
+class Category(models.Model):
+    
+    title = models.CharField(max_length=255, verbose_name="Название")
+    description = models.TextField(blank=True, verbose_name="Описание")
+    
+    def __str__(self):
+        return self.title
+    class Meta():
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
+                
 class Product(models.Model):
+    category = models.ManyToManyField(Category)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, verbose_name="Название")
     description = models.TextField(blank=True, verbose_name="Описание")
     amount = models.IntegerField(default=0, verbose_name="Количество")
     price = models.FloatField(default=0.0, verbose_name="Цена")
     ative = models.BooleanField(default=False, verbose_name="Статус активности")
-    images = models.ImageField(verbose_name="Фотографии")
+    images = models.ImageField(blank=True, verbose_name="Фотографии")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Дата изменения")
     
@@ -30,12 +43,3 @@ class Product(models.Model):
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
 
-class Category(models.Model):
-    title = models.CharField(max_length=255, verbose_name="Название")
-    description = models.TextField(blank=True, verbose_name="Описание")
-    
-    def __str__(self):
-        return self.title
-    class Meta():
-        verbose_name = "Категория"
-        verbose_name_plural = "Категории"
