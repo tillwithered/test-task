@@ -5,10 +5,11 @@ class Shop(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Дата изменения")
     description = models.TextField(blank=True, verbose_name="Описание")
-    image = models.ImageField(upload_to="shop_pictures/", verbose_name="Фотография")
+    image = models.ImageField(blank=True, upload_to="shop_pictures/", verbose_name="Фотография")
     
     def admin_photo(self):
-        return mark_safe("<img src='{}' width='150' />".format(self.image.url))
+        if self.image:
+            return mark_safe("<img src='{}' width='150' />".format(self.image.url))
     admin_photo.short_description = "Фотография"
     admin_photo.allow_tags = True
     
@@ -28,7 +29,8 @@ class Category(models.Model):
     
     title = models.CharField(max_length=255, verbose_name="Название")
     description = models.TextField(blank=True, verbose_name="Описание")
-    
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL,
+                               blank=True, null=True, related_name='children')
     def __str__(self):
         return self.title
     class Meta():

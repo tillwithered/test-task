@@ -18,8 +18,12 @@ class ShopAdmin(admin.ModelAdmin):
     delete_selected.short_description = "Удаалить выбранные магазины"
      
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("id", "title")
+    list_display = ("id", "title", "parent")
     search_fields = ("title", "id")
+    actions = ['show_all_paths']
+
+    def show_all_paths(self, request, queryset):
+        print(queryset)
     
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "amount", "price", "shop")
