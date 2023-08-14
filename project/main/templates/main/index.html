@@ -1,0 +1,37 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huge Centered Button</title>
+<style>
+  body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+  }
+
+  .center-button {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 24px;
+    padding: 20px 40px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+</style>
+</head>
+<body>
+    <form method="post" action="{% url 'admin_redirect' %}">
+        {% csrf_token %}
+        <button class="center-button">Перейти в админ-панель</button>
+    </form>
+</body>
+</html>
