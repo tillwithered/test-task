@@ -6,12 +6,14 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django_admin_filters import DateRange
 from django_mptt_admin.admin import DjangoMpttAdmin
-from django.forms.models import BaseInlineFormSet
 import os 
+from django.contrib.sessions.models import Session
 
 class ProductGalleryInline(admin.TabularInline):
     extra = 1
     fk_name = 'product'
+    verbose_name = "Добавить Фото"
+    verbose_name_plural = "Добавить Фотографии"
     model = ProductGallery
     readonly_fields = ('product_preview', )
     def product_preview(self, obj):
@@ -23,6 +25,8 @@ class ProductGalleryInline(admin.TabularInline):
 class ShopGalleryInline(admin.TabularInline):
     extra = 1
     fk_name = 'shop'
+    verbose_name = "Добавить Фото"
+    verbose_name_plural = "Добавить Фотографии"
     model = ShopGallery
     readonly_fields = ('product_preview',)
     def product_preview(self, obj):
@@ -69,12 +73,23 @@ class ShopAdmin(admin.ModelAdmin):
 class CategoryAdmin(DjangoMpttAdmin):
     prepopulated_fields = {"slug": ("title",)}
     list_display = ("id", "title", "parent")
-    search_fields = ("title", "id", "parent")
+    search_fields = ("title", "id")
     actions = ['show_all_paths']
 
     def show_all_paths(self, request, queryset):
+        answer = []
+        for data in queryset:
+            instance = Category.objects.get(title=data)
+            sub_answer = [instance.title]
+            while instance.parent_id != None:
+                sub_answer.append(name := (Category.objects.filter(id=instance.parent_id)[0].title))
+                instance = Category.objects.get(title=name)
+            answer.append(sub_answer)
+        request.session['category_path'] = answer
         url = reverse('scheme')
         return HttpResponseRedirect(url)
+    show_all_paths.short_description = "Показать отношения категорий"
+
     
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "amount", "price", "shop", "orders","active", "time_create", 'preview') #"display_gallery_info"
@@ -88,8 +103,7 @@ class ProductAdmin(admin.ModelAdmin):
             return  mark_safe("<img src='{}' width='150' />".format(data.image.url))
         except Exception:
             return "---"
-        
-          
+         
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Shop, ShopAdmin)
 admin.site.register(Category, CategoryAdmin)

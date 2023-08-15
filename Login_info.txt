@@ -1,0 +1,2 @@
+ProductAdmin (Возможность редактировать продукты) Логин: ProductAdmin Пароль: ytrewq4321
+MasterAdmin (Возможность редактировать все) Логин: MasterAdmin Пароль: ytrewq4321
