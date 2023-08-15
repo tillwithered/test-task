@@ -9,23 +9,27 @@ from django_mptt_admin.admin import DjangoMpttAdmin
 from django.forms.models import BaseInlineFormSet
 import os 
 
-
-class GalleryInline(admin.TabularInline):
+class ProductGalleryInline(admin.TabularInline):
     extra = 1
     fk_name = 'product'
     model = ProductGallery
-    readonly_fields = ('image_preview', )
-    
-    def delete_model(self, request, obj):
-        obj.image.delete()
-        print("removing")
-        # os.remove(f'media/product_pictures/{url}')
-        super().delete_model(request, obj)
-    def image_preview(self, obj):
+    readonly_fields = ('product_preview', )
+    def product_preview(self, obj):
         if obj.image:
             return mark_safe('<img src="{0}" width="20%" height="10%" />'.format(obj.image.url))
         else:
-            return '(No image)'   
+            return '(No image)'
+        
+class ShopGalleryInline(admin.TabularInline):
+    extra = 1
+    fk_name = 'shop'
+    model = ShopGallery
+    readonly_fields = ('product_preview',)
+    def product_preview(self, obj):
+        if obj.image:
+            return mark_safe('<img src="{0}" width="20%" height="10%" />'.format(obj.image.url))
+        else:
+            return '(No image)'
     
     
 class PriceProductFilter(DateRange):
@@ -50,21 +54,18 @@ class PriceProductFilter(DateRange):
     
          
 class ShopAdmin(admin.ModelAdmin):
-    fields = ("title", "time_create", "description", "image", "admin_photo")
-    list_display = ("id", "title", "time_create", "admin_photo")
-    search_fields = ("title")
-    readonly_fields = ("time_create", "admin_photo")
-    actions = ['delete_selected']
-    
-    def delete_selected(self, request, queryset):
-        for shop in queryset:
-            if shop.image:
-                shop.image.delete()
-            shop.delete()
-        self.message_user(request, f"Deleted {queryset.count()} shops and associated pictures.")
-
-    delete_selected.short_description = "Удаалить выбранные магазины"
-     
+    list_display = ("id", "title", "time_create", 'preview')
+    search_fields = ("title",)
+    readonly_fields = ("time_create",)
+    inlines = [ShopGalleryInline, ]
+    def preview(self, obj):
+        data_set = ShopGallery.objects.filter(shop_id=obj)
+        try:
+            data = data_set[0]
+            return  mark_safe("<img src='{}' width='150' />".format(data.image.url))
+        except Exception:
+            return "---"
+        
 class CategoryAdmin(DjangoMpttAdmin):
     prepopulated_fields = {"slug": ("title",)}
     list_display = ("id", "title", "parent")
@@ -79,7 +80,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "amount", "price", "shop", "orders","active", "time_create", 'preview') #"display_gallery_info"
     search_fields = ("title", "id")
     list_filter = ('shop', 'active', ('price', PriceProductFilter))
-    inlines = [GalleryInline,] 
+    inlines = [ProductGalleryInline,] 
     def preview(self, obj):
         data_set = ProductGallery.objects.filter(product_id=obj)
         try:
@@ -88,8 +89,6 @@ class ProductAdmin(admin.ModelAdmin):
         except Exception:
             return "---"
         
-        
-
           
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Shop, ShopAdmin)

@@ -9,21 +9,8 @@ class Shop(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Дата изменения")
     description = models.TextField(blank=True, verbose_name="Описание")
-    image = models.ImageField(blank=True, upload_to="shop_pictures/", verbose_name="Фотография")
-    
-    def admin_photo(self):
-        if self.image:
-            return mark_safe("<img src='{}' width='150' />".format(self.image.url))
-    admin_photo.short_description = "Фотография"
-    admin_photo.allow_tags = True
-    
-    def delete(self, *args, **kwargs):
-        if self.image:
-            self.image.delete()
-        super().delete(*args, **kwargs)
-    
     def __str__(self):
-        return self.title
+        return str(self.id)
     
     class Meta():
         verbose_name = "Магазин"
@@ -72,7 +59,10 @@ class Product(models.Model):
         permissions = [
             ("can_edit_product", "Can edit product"),
         ]
-        
+class ShopGallery(models.Model):
+    image = models.ImageField(upload_to='shop_pictures')
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='images')    
+     
 class ProductGallery(models.Model):
     image = models.ImageField(upload_to='product_pictures')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
