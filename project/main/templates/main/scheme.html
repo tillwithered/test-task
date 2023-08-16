@@ -1,9 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        "Hello world"
-    </head>
-    <body>
-        "Hello world"
-    </body>
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+<head>
+    <title>Схема категорий</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        ul ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        li:last-child::before {
+            content: "";
+        }
+        hr {
+            margin: 20px 0;
+        }
+        span {
+            font-family: 'Montserrat';
+            font-size: 26px;
+        }
+        a {
+            text-decoration: none;
+            color: #787170; 
+        }
+    </style>
+</head>
+<body>
+    <h1> <span style="font-size: 48px;"> Схема категорий </span> </h1>
+    
+    <ul>
+        {% for category in category_path %}
+            <li>
+                <ul>
+                    <span> {{forloop.counter }} </span>
+                    {% for item in category %}
+                        {% if forloop.last %}
+                                <span>{{ item }}</span>
+                        {%else%}
+                                <span>{{ item }} → </span>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+            <hr>
+        {% endfor %}
+        <h1> <span style="font-size: 32px;"> <a href="/admin"> Вернуться в админ-панель </a> </span></h1>
+    </ul>
+</body>
 </html>

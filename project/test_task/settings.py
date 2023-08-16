@@ -41,8 +41,7 @@ INSTALLED_APPS = [
     'main',
     'django_admin_filters',
     'mptt',
-    'django_mptt_admin',
-    'easy_thumbnails'
+    'django_mptt_admin'
 ]
 
 MIDDLEWARE = [
